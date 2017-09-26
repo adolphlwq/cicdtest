@@ -11,5 +11,9 @@ def index():
 def health():
     return jsonify(status="health")
 
+@app.route('/_ping')
+def ping():
+    return jsonify("pong")
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
