@@ -15,5 +15,9 @@ def health():
 def ping():
     return jsonify("pong")
 
+@app.route('/status')
+def status():
+    return jsonify(hello="world")
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
