@@ -4,4 +4,5 @@ pre_ci_boot:
     tag: 1.8-alpine
 ci:
     - echo "hello flask" >> /tmp/wqlu-artifact.txt
-    - export ALAUDACD_UPLOAD_DIR = /tmp/wqlu-artifact.txt
+    - echo $ALAUDACD_UPLOAD_DIR
+    - cp /tmp/wqlu-artifact.txt $ALAUDACD_UPLOAD_DIR/
