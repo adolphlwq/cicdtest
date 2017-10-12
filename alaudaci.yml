@@ -1,0 +1,6 @@
+version: "0.1.0"
+pre_ci_boot:
+    image: alpine
+    tag: 3.4
+ci:
+    - echo "hello flask" >> ./wqlu-artifact.txt
