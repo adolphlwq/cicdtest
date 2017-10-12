@@ -3,5 +3,5 @@ pre_ci_boot:
     image: index.alauda.cn/alaudaorg/gobuild
     tag: 1.8-alpine
 ci:
-    - echo $ALAUDACI_DEST_DIR
-    - echo "hello flask" >> $ALAUDACD_UPLOAD_DIR/wqlu-artifact.txt
+    - echo "hello flask" >> /tmp/wqlu-artifact.txt
+    - export ALAUDACD_UPLOAD_DIR = /tmp/wqlu-artifact.txt
