@@ -5,3 +5,4 @@ pre_ci_boot:
 ci:
     - echo $ALAUDACI_DEST_DIR
     - echo "hello flask" >> $ALAUDACI_DEST_DIR/wqlu-artifact.txt
+    - export ALAUDACD_UPLOAD_DIR=$ALAUDACI_DEST_DIR/wqlu-artifact.txt
