@@ -4,5 +4,4 @@ pre_ci_boot:
     tag: 1.8-alpine
 ci:
     - echo $ALAUDACI_DEST_DIR
-    - echo "hello flask" >> $ALAUDACI_DEST_DIR/wqlu-artifact.txt
-    - export ALAUDACD_UPLOAD_DIR=$ALAUDACI_DEST_DIR/wqlu-artifact.txt
+    - echo "hello flask" >> $ALAUDACD_UPLOAD_DIR/wqlu-artifact.txt
