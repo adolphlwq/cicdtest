@@ -6,4 +6,4 @@ ci:
     - echo "hello flask" >> /tmp/wqlu-artifact.txt
     - echo $ALAUDACD_UPLOAD_DIR
     - echo $ALAUDACI_UPLOAD_DIR
-    - cp /tmp/wqlu-artifact.txt $ALAUDACI_UPLOAD_DIR/
+    - cp /tmp/wqlu-artifact.txt $ALAUDACI_UPLOAD_DIR
