@@ -1,0 +1,9 @@
+version: "0.1.0"
+pre_ci_boot:
+    image: index.alauda.cn/alaudaorg/gobuild
+    tag: 1.8-alpine
+ci:
+    - echo "hello flask" >> /tmp/wqlu-artifact.txt
+    - echo $ALAUDACD_UPLOAD_DIR
+    - echo $ALAUDACI_UPLOAD_DIR
+    - cp /tmp/wqlu-artifact.txt $ALAUDACI_UPLOAD_DIR
