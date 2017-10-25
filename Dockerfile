@@ -5,4 +5,5 @@ RUN echo "hello, simple" && \
     echo "hello, sinple2" >> hello.txt && \
     echo "hello, sinple3" >> hello.txt && \
     echo "hello, sinple4" >> hello.txt && \
-    echo "hello, sinple5" >> hello.txt
+    echo "hello, sinple5" >> hello.txt && \
+    echo "hello, sinple6" >> hello.txt
