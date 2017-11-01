@@ -1,6 +1,5 @@
 #! /bin/bash
 # download artifacts from wukong with webhook payload
-set -x
 ARTIFACT_PATHS=
 MINIO_KEYS=
 MINIO_KEYS_FILENAME=.minio_keys
@@ -62,6 +61,5 @@ function main(){
     done
     clean_cache
 }
-echo "print env in script file"
-env
+
 main
