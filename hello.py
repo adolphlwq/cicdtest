@@ -15,6 +15,10 @@ def health():
 def ping():
     return jsonify("pong")
 
+@app.route('/_diagnose')
+def diagnose():
+    return jsonify({"status":"OK"})
+
 @app.route('/status')
 def status():
     return jsonify(hello="world")
