@@ -1,7 +1,7 @@
 # Init
 A demo for Jenkins CICD
 
-- 2018.3.30 update 3
+- 2018.3.30 update 4
 
 - 2016.11.1
 test git branch and tracking branch
