@@ -1,2 +1,2 @@
 # Init
-A demo for Jenkins CICD
+A demo repo for Jenkins CICD with Jenkinsfile

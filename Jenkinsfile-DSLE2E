@@ -1,0 +1,25 @@
+pipeline{
+    agent any
+    stages{
+         
+        stage("Build"){
+            steps{
+                timeout(time:15, unit:'MINUTES'){
+                    script{
+                        alauda.startBuild("e2e-buildConfigForDSLazure-k8s-17", "")
+                    }
+                }
+            }
+        }
+
+    }
+ 
+    post{
+        always{
+            script{
+                alauda.notify("yzwang1")
+            }
+            
+        }
+    }
+}
