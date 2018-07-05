@@ -20,7 +20,11 @@ spec:
   body: |+
     script{
       sh "sonar-scanner"
-      sh "echo {{.contextDir}}"
+      sh "echo {{.integrationID}} \
+          echo {{.qualityGate}} \
+          echo {{.lang}} \
+          echo {{.sonarContextDir}} \
+          echo {{.propertiesPath}}"
     }
   arguments:
     - name: "integrationID"
