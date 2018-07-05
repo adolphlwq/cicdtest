@@ -365,14 +365,16 @@ spec:
         - name: "integrationID"
           schema:
             type: string
+          binding:
+            - CodeScan.args.integrationID
           display:
             type: alauda.io/integrations/sonarqube
             name:
-              zh-CN: "Jenkins集成ID"
-              en: "Jenkins Integration ID"
+              zh-CN: "Jenkins集成实例ID"
+              en: "Jenkins Integration Instance ID"
             description:
-              zh-CN: "Jenkins集成ID"
-              en: "Jenkins Integration ID"
+              zh-CN: "Jenkins集成实例ID"
+              en: "Jenkins Integration Instance ID"
           required: true
           default: ""
           relation:
@@ -383,6 +385,8 @@ spec:
         - name: "qualityGate"
           schema:
             type: string
+          binding:
+            - CodeScan.args.qualityGate
           display:
             type: alauda.io/sonarqube/qualitygate
             name:
@@ -401,6 +405,8 @@ spec:
         - name: "lang"
           schema:
             type: string
+          binding:
+            - CodeScan.args.lang
           display:
             type: alauda.io/sonarqube/lang
             name:
@@ -419,6 +425,8 @@ spec:
         - name: "sonarContextDir"
           schema:
             type: string
+          binding:
+            - CodeScan.args.sonarContextDir
           display:
             type: string
             name:
@@ -437,14 +445,16 @@ spec:
         - name: "propertiesPath"
           schema:
             type: string
+          binding:
+            - CodeScan.args.propertiesPath
           display:
             type: string
             name:
-              zh-CN: "sonar.properties路径"
-              en: "sonar.properties Path"
+              zh-CN: "sonar-project.properties路径"
+              en: "sonar-project.properties Path"
             description:
-              zh-CN: "sonar.properties路径"
-              en: "sonar.properties Path"
+              zh-CN: "sonar-project.properties路径"
+              en: "sonar-project.properties Path"
           required: false
           default: "."
           relation:

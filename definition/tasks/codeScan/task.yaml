@@ -19,81 +19,57 @@ spec:
     label: docker
   body: |+
     script{
-      deploy.scan("{.repo}", "{.branch}", "{.credentialsId}", "{.folder}","{.debug}", "{.owner}", "{.actionUser}").
-      startToSonar()
+      sh "sonar-scanner"
+      sh "echo {{.contextDir}}"
     }
   arguments:
-    - name: "repo"
+    - name: "integrationID"
       schema:
         type: string
       display:
-        type: string
+        type: alauda.io/integrations/sonarqube
         name:
-          zh-CN: "代码仓库"
-          en: "code repo"
+          zh-CN: "Jenkins集成实例ID"
+          en: "Jenkins Integration Instance ID"
       required: true
       default: ""
-    - name: "branch"
+    - name: "qualityGate"
       schema:
         type: string
       display:
-        type: string
+        type: alauda.io/sonarqube/qualitygate
         name:
-          zh-CN: "代码分支"
-          en: "code branch"
-      required: true
-      default: "master"
-    - name: "credentialsId"
-      schema:
-        type: string
-      display:
-        type: string
-        name:
-          zh-CN: "仓库凭据"
-          en: "code repo credentials id"
-        description:
-          zh-CN: 构建仓库的登录凭据
-          en: Credentials of code repo
+          zh-CN: "Sonar扫描质量阈"
+          en: "Sonar Scan QualityGate"
       required: false
       default: ""
-    - name: "folder"
+    - name: "lang"
+      schema:
+        type: string
+      display:
+        type: alauda.io/sonarqube/lang
+        name:
+          zh-CN: "语言"
+          en: "Sonar Scan Language"
+      required: false
+      default: ""
+    - name: "sonarContextDir"
       schema:
         type: string
       display:
         type: string
         name:
-          zh-CN: "sonar.properties 文件路径"
-          en: "path of sonar.properties"
+          zh-CN: "代码扫描路径"
+          en: "code path of sonar scanner"
+      required: false
+      default: .
+    - name: "propertiesPath"
+      schema:
+        type: boolean
+      display:
+        type: boolean
+        name:
+          zh-CN: "sonar-project.properties路径"
+          en: "sonar-project.properties Path"
       required: true
       default: .
-    - name: "debug"
-      schema:
-        type: bool
-      display:
-        type: bool
-        name:
-          zh-CN: "sonar扫描是否开启debug"
-          en: "If sonar scanner use debug mode"
-      required: true
-      default: false
-    - name: "owner"
-      schema:
-        type: string
-      display:
-        type: string
-        name:
-          zh-CN: "仓库所有人"
-          en: "code repo owner"
-      required: true
-      default: "mathildetech"
-    - name: "actionUser"
-      schema:
-        type: string
-      display:
-        type: string
-        name:
-          zh-CN: "扫描操作人"
-          en: "sonar scanner action user"
-      required: true
-      relation:
-      default: ""
