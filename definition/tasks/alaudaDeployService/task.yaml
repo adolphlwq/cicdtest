@@ -1,0 +1,125 @@
+
+apiVersion: devops.alauda.io/v1alpha1
+kind: PipelineTaskTemplate
+metadata:
+  name: alaudaDeployService
+  annotations:
+    alauda.io/displayName.zh-CN: 更新服务
+    alauda.io/displayName.en: DeployService
+    alauda.io/description.zh-CN: 更新服务
+    alauda.io/description.en: DeployService
+    alauda.io/readme.zh-CN: 更新服务
+    alauda.io/readme.en: DeployService
+    alauda.io/version: v0.1
+    alauda.io/style.icon: 
+  labels:
+    catgory: CD
+spec:
+  engine: gotpl
+  body: |+
+    script{
+      {{- if .containerInfo }}
+      timeout(time:{{.timeout}}, unit: "SECONDS"){
+        alauda.withCluster("{{.containerInfo.clusterName}}", "{{.containerInfo.namespace}}"){
+          {{- if and ._system_ ._system_.project }}
+          alauda.withProject("{{._system_.project}}"){
+          {{- end}}
+            def serviceID = alauda.service("{{.containerInfo.serviceName}}").
+            withContainer("{{.containerInfo.containerName}}").
+            {{- if .image}}
+            withImage("{{.image.registry}}/{{.image.repository}}:{{.imageTag}}").
+            {{- end}}
+            withImageTag("{{.imageTag}}").
+            {{- range $i,$item := .env}}
+            withEnv("{{$item.Name}}", "{{$item.Value}}").
+            {{- end}}
+            withCommand("{{.command}}").
+            withArgs("{{.args}}").
+            deploy();
+          {{- if and ._system_ ._system_.project }}
+          }
+          {{- end}}
+        }
+      }
+      {{- else}}
+      echo "no container, will do nothing."
+      {{- end}}
+    }
+  arguments:
+    - name: containerInfo
+      schema:
+        type: alauda.io/newk8scontainermix
+      display:
+        type: alauda.io/newk8scontainermix
+        name:
+          zh-CN: "容器"
+          en: "Container"
+        description:
+          zh-CN: |
+            即将被更新的服务的容器,这里包含了一下字段
+            1. 集群名称，表示即将更新的服务容器所在的集群
+            2. 命名空间，表示即将更新的服务容器所在的集群的名空间
+            3. 服务名称，表示即将更新的服务容器所在的集群的服务名称
+            4. 容器名称，表示即将更新的服务容器的名称
+          en: |
+            The containers in the service which will be updated contain the following fields
+            1.  The cluster name in which the service will be updated
+            2.  The namespace in which the service will be updated
+            3.  The service name which will be updated
+            4.  The container name in the service which will be updated
+      required: true
+    - name: command
+      schema:
+        type: string
+      display:
+        type: string
+        name:
+          zh-CN: "接入点"
+          en: "Entrypoint"
+      required: false
+    - name: args
+      schema:
+        type: string
+      display:
+        type: string
+        name:
+          zh-CN: "执行命令"
+          en: "Run Command"
+      required: false
+    - name: "image"
+      schema:
+        type: alauda.io/imagerepositorymix
+      display:
+        type: alauda.io/imagerepositorymix
+        name:
+          zh-CN: "更新使用的镜像"
+          en: "Use Image"
+      required: false
+    - name: "imageTag"
+      schema:
+        type: string
+      display:
+        type: alauda.io/imagetag
+        name:
+          zh-CN: "镜像版本"
+          en: "Image Tag"
+      required: true
+      default: latest
+    - name: env
+      schema:
+        type: alauda.io/k8senv
+      display:
+        type: alauda.io/k8senv
+        name:
+          zh-CN: "环境变量"
+          en: "environments"
+    - name: timeout
+      schema:
+        type: int
+      display:
+        type: int
+        name:
+          zh-CN: "超时时间（秒）"
+          en: "Timeout (s)"
+      required: true
+      default: 600

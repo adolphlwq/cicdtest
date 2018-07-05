@@ -1,0 +1,99 @@
+apiVersion: devops.alauda.io/v1alpha1
+kind: PipelineTaskTemplate
+metadata:
+  name: alaudaCodeScan
+  annotations:
+    alauda.io/displayName.zh-CN: 代码扫描
+    alauda.io/displayName.en: CodeScan
+    alauda.io/description.zh-CN: 代码扫描
+    alauda.io/description.en: CodeScan
+    alauda.io/readme.zh-CN: 代码扫描
+    alauda.io/readme.en: CodeScan
+    alauda.io/version: v0.1
+    alauda.io/style.icon: 
+  labels:
+    catgory: CI
+spec:
+  engine: gotpl
+  agent:
+    label: docker
+  body: |+
+    script{
+      deploy.scan("{.repo}", "{.branch}", "{.credentialsId}", "{.folder}","{.debug}", "{.owner}", "{.actionUser}").
+      startToSonar()
+    }
+  arguments:
+    - name: "repo"
+      schema:
+        type: string
+      display:
+        type: string
+        name:
+          zh-CN: "代码仓库"
+          en: "code repo"
+      required: true
+      default: ""
+    - name: "branch"
+      schema:
+        type: string
+      display:
+        type: string
+        name:
+          zh-CN: "代码分支"
+          en: "code branch"
+      required: true
+      default: "master"
+    - name: "credentialsId"
+      schema:
+        type: string
+      display:
+        type: string
+        name:
+          zh-CN: "仓库凭据"
+          en: "code repo credentials id"
+        description:
+          zh-CN: 构建仓库的登录凭据
+          en: Credentials of code repo
+      required: false
+      default: ""
+    - name: "folder"
+      schema:
+        type: string
+      display:
+        type: string
+        name:
+          zh-CN: "sonar.properties 文件路径"
+          en: "path of sonar.properties"
+      required: true
+      default: .
+    - name: "debug"
+      schema:
+        type: bool
+      display:
+        type: bool
+        name:
+          zh-CN: "sonar扫描是否开启debug"
+          en: "If sonar scanner use debug mode"
+      required: true
+      default: false
+    - name: "owner"
+      schema:
+        type: string
+      display:
+        type: string
+        name:
+          zh-CN: "仓库所有人"
+          en: "code repo owner"
+      required: true
+      default: "mathildetech"
+    - name: "actionUser"
+      schema:
+        type: string
+      display:
+        type: string
+        name:
+          zh-CN: "扫描操作人"
+          en: "sonar scanner action user"
+      required: true
+      relation:
+      default: ""
