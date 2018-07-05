@@ -9,7 +9,7 @@ metadata:
     alauda.io/description.en: CodeScan
     alauda.io/readme.zh-CN: 代码扫描
     alauda.io/readme.en: CodeScan
-    alauda.io/version: v0.1
+    alauda.io/version: v0.2
     alauda.io/style.icon: 
   labels:
     catgory: CI
