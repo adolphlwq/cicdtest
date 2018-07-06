@@ -20,11 +20,12 @@ spec:
   body: |+
     script{
       sh "sonar-scanner"
-      sh "echo {{.integrationID}} \
-          echo {{.qualityGate}} \
-          echo {{.lang}} \
-          echo {{.sonarContextDir}} \
-          echo {{.propertiesPath}}"
+      sh "echo integrationIDn{{.integrationID}} \
+          echo qualityGate {{.qualityGate}} \
+          echo lang {{.lang}} \
+          echo sonarContextDir {{.sonarContextDir}} \
+          echo propertiesPath {{.propertiesPath}} \
+          echo waitForQualityGate {{.waitForQualityGate}}"
     }
   arguments:
     - name: "integrationID"
@@ -77,3 +78,16 @@ spec:
           en: "sonar-project.properties Path"
       required: true
       default: .
+    - name: "waitForQualityGate"
+      schema:
+        type: boolean
+      display:
+        type: boolean
+        name:
+          zh-CN: "是否等待扫描结果"
+          en: "Enable Wait QualityGate"
+        description:
+          zh-CN: 是否等待扫描结果
+          en: If Enable Wait QualityGat
+      required: false
+      default: false
