@@ -9,7 +9,7 @@ metadata:
     alauda.io/description.en: Clone code and builds a docker image
     alauda.io/readme.zh-CN: 克隆代码并构建镜像
     alauda.io/readme.en: Clone code and builds a docker image
-    alauda.io/version: v0.4.2
+    alauda.io/version: v0.4.3
     alauda.io/style.icon: build
   labels:
     category: CICD
@@ -34,7 +34,7 @@ spec:
     - name: CodeScan
       tasks:
         - name: CodeScan
-          type: alaudaCodeScan
+          type: testorg001/alaudaCodeScan
           options:
             timeout: 7200
   arguments:
