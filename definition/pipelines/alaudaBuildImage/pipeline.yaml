@@ -9,7 +9,7 @@ metadata:
     alauda.io/description.en: Clone code and builds a docker image
     alauda.io/readme.zh-CN: 克隆代码并构建镜像
     alauda.io/readme.en: Clone code and builds a docker image
-    alauda.io/version: v0.2
+    alauda.io/version: v0.3
     alauda.io/style.icon: build
   labels:
     category: CICD
@@ -34,7 +34,7 @@ spec:
     - name: CodeScan
       tasks:
         - name: CodeScan
-          type: public/codeScan
+          type: /codeScan
           options:
             timeout: 7200
   arguments:
@@ -370,11 +370,11 @@ spec:
           display:
             type: alauda.io/integrations/sonarqube
             name:
-              zh-CN: "Jenkins集成实例ID"
-              en: "Jenkins Integration Instance ID"
+              zh-CN: "Sonarqube集成实例ID"
+              en: "Sonarqube Integration Instance ID"
             description:
-              zh-CN: "Jenkins集成实例ID"
-              en: "Jenkins Integration Instance ID"
+              zh-CN: "Sonarqube集成实例ID"
+              en: "Sonarqube Integration Instance ID"
           required: true
           default: ""
           relation:
