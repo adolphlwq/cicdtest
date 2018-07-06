@@ -9,7 +9,7 @@ metadata:
     alauda.io/description.en: CodeScan
     alauda.io/readme.zh-CN: 代码扫描
     alauda.io/readme.en: CodeScan
-    alauda.io/version: v0.4.3
+    alauda.io/version: v0.4.4
     alauda.io/style.icon: 
   labels:
     catgory: CI
@@ -70,9 +70,9 @@ spec:
       default: .
     - name: "propertiesPath"
       schema:
-        type: boolean
+        type: string
       display:
-        type: boolean
+        type: string
         name:
           zh-CN: "sonar-project.properties路径"
           en: "sonar-project.properties Path"
