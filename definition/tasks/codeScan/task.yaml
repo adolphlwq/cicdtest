@@ -9,7 +9,7 @@ metadata:
     alauda.io/description.en: CodeScan
     alauda.io/readme.zh-CN: 代码扫描
     alauda.io/readme.en: CodeScan
-    alauda.io/version: v0.4.4
+    alauda.io/version: v0.4.5
     alauda.io/style.icon: 
   labels:
     catgory: CI
@@ -19,15 +19,57 @@ spec:
     label: docker
   body: |+
     script{
-      sh "sonar-scanner"
-      sh "echo integrationIDn{{.integrationID}} \
+      sh "echo integrationID {{.integrationID}} \
           echo qualityGate {{.qualityGate}} \
           echo lang {{.lang}} \
           echo sonarContextDir {{.sonarContextDir}} \
           echo propertiesPath {{.propertiesPath}} \
           echo waitForQualityGate {{.waitForQualityGate}}"
+      {{- if .sonarScanEnabled}}
+        // get sonar token and url
+
+        // wrap sonar-scanner command
+        def SONAR_SCANNER_OPTS=[]
+        {{if .lang}}
+        SONAR_SCANNER_OPTS << '-Dsonar.language={{.lang}}'
+        {{end}}
+        {{if .sonarContextDir}}
+        SONAR_SCANNER_OPTS << '-Dsonar.sources={{.sonarContextDir}}'
+        {{end}}
+        {{if .propertiesPath}}
+        SONAR_SCANNER_OPTS << '-Dproject.settings={{.propertiesPath}}'
+        {{end}}
+
+        {{if .qualityGate}}
+        timeout(time: 1, unit: 'HOURS') {
+          def qg = waitForQualityGate()
+          if (qg.status != 'OK') {
+            error "Pipeline aborted due to quality gate failure: ${qg.status}"
+          }
+        }
+        {{end}}
+
+        // sh "sonar-scanner SONAR_SCANNER_OPTS.join(' ')"
+        sh "echo SONAR_SCANNER_OPTS.join(' ')"
+        {{- end}}
+      {{- else}}
+      echo "not enable sonar code scan, will do nothing."
+      {{- end}}
     }
   arguments:
+    - name: "sonarScanEnabled"
+      schema:
+        type: boolean
+      display:
+        type: boolean
+        name:
+          zh-CN: "是否开启代码扫描"
+          en: "Enable Sonar Scan"
+        description:
+          zh-CN: 是否开启代码扫描
+          en: If Enable Sonar Scan
+      required: true
+      default: false
     - name: "integrationID"
       schema:
         type: string

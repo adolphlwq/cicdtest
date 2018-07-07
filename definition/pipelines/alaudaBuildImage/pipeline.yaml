@@ -9,7 +9,7 @@ metadata:
     alauda.io/description.en: Clone code and builds a docker image
     alauda.io/readme.zh-CN: 克隆代码并构建镜像
     alauda.io/readme.en: Clone code and builds a docker image
-    alauda.io/version: v0.4.4
+    alauda.io/version: v0.4.5
     alauda.io/style.icon: build
   labels:
     category: CICD
@@ -352,6 +352,8 @@ spec:
         - name: "sonarScanEnabled"
           schema:
             type: boolean
+          binding:
+            - CodeScan.args.sonarScanEnabled
           display:
             type: boolean
             name:
