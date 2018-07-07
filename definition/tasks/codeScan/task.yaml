@@ -9,7 +9,7 @@ metadata:
     alauda.io/description.en: CodeScan
     alauda.io/readme.zh-CN: 代码扫描
     alauda.io/readme.en: CodeScan
-    alauda.io/version: v0.4.5
+    alauda.io/version: v0.4.6
     alauda.io/style.icon: 
   labels:
     catgory: CI
@@ -51,7 +51,6 @@ spec:
 
         // sh "sonar-scanner SONAR_SCANNER_OPTS.join(' ')"
         sh "echo SONAR_SCANNER_OPTS.join(' ')"
-        {{- end}}
       {{- else}}
       echo "not enable sonar code scan, will do nothing."
       {{- end}}
