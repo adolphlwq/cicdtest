@@ -9,19 +9,19 @@ metadata:
     alauda.io/description.en: CodeScan
     alauda.io/readme.zh-CN: 代码扫描
     alauda.io/readme.en: CodeScan
-    alauda.io/version: v0.4.8
+    alauda.io/version: v0.4.9
     alauda.io/style.icon: 
   labels:
     catgory: CI
 spec:
   engine: gotpl
   agent:
-    label: docker
+    label: sonarqube
   body: |+
     script{
       {{- if .sonarScanEnabled}}
         // get sonar token and url
-        def sonar_info = alauda.retrieveIntegration({{.integrationID}}, "")
+        def sonar_info = alauda.retrieveIntegration("{{.integrationID}}", "")
         sh "echo mapss size ${sonar_info.size()}"
         sh "echo token is ${sonar_info['token']}"
         sh "echo endpoint is ${sonar_info['endpoint']}"
@@ -33,8 +33,8 @@ spec:
 
         // wrap sonar-scanner command
         def SONAR_SCANNER_OPTS=[]
-        SONAR_SCANNER_OPTS << '-Dsonar.host.url=${sonar_info['endpoint']}'
-        SONAR_SCANNER_OPTS << '-Dsonar.login=${sonar_info['token']}'
+        SONAR_SCANNER_OPTS << "-Dsonar.host.url=${sonar_info['endpoint']}"
+        SONAR_SCANNER_OPTS << "-Dsonar.login=${sonar_info['token']}"
 
         {{if .lang}}
         SONAR_SCANNER_OPTS << '-Dsonar.language={{.lang}}'
