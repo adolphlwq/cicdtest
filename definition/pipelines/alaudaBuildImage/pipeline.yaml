@@ -9,7 +9,7 @@ metadata:
     alauda.io/description.en: Clone code and builds a docker image
     alauda.io/readme.zh-CN: 克隆代码并构建镜像
     alauda.io/readme.en: Clone code and builds a docker image
-    alauda.io/version: v0.4.5
+    alauda.io/version: v0.4.6
     alauda.io/style.icon: build
   labels:
     category: CICD
@@ -458,7 +458,7 @@ spec:
               zh-CN: "sonar-project.properties路径"
               en: "sonar-project.properties Path"
           required: false
-          default: "."
+          default: "./sonar-project.properties"
           relation:
             - action: show
               when:

@@ -9,7 +9,7 @@ metadata:
     alauda.io/description.en: CodeScan
     alauda.io/readme.zh-CN: 代码扫描
     alauda.io/readme.en: CodeScan
-    alauda.io/version: v0.4.6
+    alauda.io/version: v0.4.7
     alauda.io/style.icon: 
   labels:
     catgory: CI
@@ -40,6 +40,10 @@ spec:
         SONAR_SCANNER_OPTS << '-Dproject.settings={{.propertiesPath}}'
         {{end}}
 
+        // start scan
+        // sh "sonar-scanner ${SONAR_SCANNER_OPTS.join(' ')}"
+        sh "sonar-scanner ${SONAR_SCANNER_OPTS.join(' ')}"
+
         {{if .qualityGate}}
         timeout(time: 1, unit: 'HOURS') {
           def qg = waitForQualityGate()
@@ -49,8 +53,6 @@ spec:
         }
         {{end}}
 
-        // sh "sonar-scanner SONAR_SCANNER_OPTS.join(' ')"
-        sh "echo SONAR_SCANNER_OPTS.join(' ')"
       {{- else}}
       echo "not enable sonar code scan, will do nothing."
       {{- end}}
@@ -118,7 +120,7 @@ spec:
           zh-CN: "sonar-project.properties路径"
           en: "sonar-project.properties Path"
       required: true
-      default: .
+      default: "./sonar-project.properties"
     - name: "waitForQualityGate"
       schema:
         type: boolean
