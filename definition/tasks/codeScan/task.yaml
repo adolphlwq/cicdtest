@@ -19,14 +19,13 @@ spec:
     label: docker
   body: |+
     script{
-      sh "echo integrationID {{.integrationID}} \
-          echo qualityGate {{.qualityGate}} \
-          echo lang {{.lang}} \
-          echo sonarContextDir {{.sonarContextDir}} \
-          echo propertiesPath {{.propertiesPath}} \
-          echo waitForQualityGate {{.waitForQualityGate}}"
       {{- if .sonarScanEnabled}}
         // get sonar token and url
+
+        // set quality gate
+        {{if .qualityGate}}
+        sh "echo set qualitygate for {{.qualityGate}}"
+        {{end}}
 
         // wrap sonar-scanner command
         def SONAR_SCANNER_OPTS=[]
@@ -41,10 +40,9 @@ spec:
         {{end}}
 
         // start scan
-        // sh "sonar-scanner ${SONAR_SCANNER_OPTS.join(' ')}"
         sh "sonar-scanner ${SONAR_SCANNER_OPTS.join(' ')}"
 
-        {{if .qualityGate}}
+        {{if .waitForQualityGate}}
         timeout(time: 1, unit: 'HOURS') {
           def qg = waitForQualityGate()
           if (qg.status != 'OK') {
