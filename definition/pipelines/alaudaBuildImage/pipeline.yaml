@@ -9,7 +9,7 @@ metadata:
     alauda.io/description.en: Clone code and builds a docker image
     alauda.io/readme.zh-CN: 克隆代码并构建镜像
     alauda.io/readme.en: Clone code and builds a docker image
-    alauda.io/version: v0.4.6
+    alauda.io/version: v0.4.7
     alauda.io/style.icon: build
   labels:
     category: CICD
@@ -404,6 +404,36 @@ spec:
               when:
                 name: sonarScanEnabled
                 value: true
+        - name: "sonarProjectKey"
+          schema:
+            type: string
+          binding:
+            - CodeScan.args.sonarProjectKey
+          display:
+            type: string
+            name:
+              zh-CN: "Sonar项目Key"
+              en: "Sonar Project Key"
+            description:
+              zh-CN: "Sonar项目Key"
+              en: "Sonar Project Key"
+          required: false
+          default: ""
+        - name: "sonarProjectName"
+          schema:
+            type: string
+          binding:
+            - CodeScan.args.sonarProjectName
+          display:
+            type: string
+            name:
+              zh-CN: "Sonar项目Name"
+              en: "Sonar Project Name"
+            description:
+              zh-CN: "Sonar项目Name"
+              en: "Sonar Project Name"
+          required: false
+          default: ""
         - name: "lang"
           schema:
             type: string

@@ -28,7 +28,9 @@ spec:
 
         // set quality gate
         {{if .qualityGate}}
-        sh "echo set qualitygate for {{.qualityGate}}"
+        sh "start setting qualitygate {{.qualityGate}} for {{.sonarProjectName}}"
+        sh "set-qualitygate ${sonar_info['endpoint']} ${sonar_info['token']} \
+                      {{.qualityGate}} {{.sonarProjectName}} {{.sonarProjectKey}}"
         {{end}}
 
         // wrap sonar-scanner command
@@ -95,6 +97,32 @@ spec:
         name:
           zh-CN: "Sonar扫描质量阈"
           en: "Sonar Scan QualityGate"
+      required: false
+      default: ""
+    - name: "sonarProjectKey"
+      schema:
+        type: string
+      display:
+        type: string
+        name:
+          zh-CN: "Sonar项目Key"
+          en: "Sonar Project Key"
+        description:
+          zh-CN: "Sonar项目Key"
+          en: "Sonar Project Key"
+      required: false
+      default: ""
+    - name: "sonarProjectName"
+      schema:
+        type: string
+      display:
+        type: string
+        name:
+          zh-CN: "Sonar项目Name"
+          en: "Sonar Project Name"
+        description:
+          zh-CN: "Sonar项目Name"
+          en: "Sonar Project Name"
       required: false
       default: ""
     - name: "lang"
