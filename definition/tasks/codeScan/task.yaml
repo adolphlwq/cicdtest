@@ -20,6 +20,9 @@ spec:
   body: |+
     script{
       {{- if .sonarScanEnabled}}
+        // unstash cloneCode
+        unstash "cloneCode"
+
         // get sonar token and url
         def sonar_info = alauda.retrieveIntegration("{{.integrationID}}", "")
 
