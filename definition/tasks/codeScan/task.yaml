@@ -9,7 +9,7 @@ metadata:
     alauda.io/description.en: CodeScan
     alauda.io/readme.zh-CN: 代码扫描
     alauda.io/readme.en: CodeScan
-    alauda.io/version: v0.4.11
+    alauda.io/version: v0.4.12
     alauda.io/style.icon: 
   labels:
     catgory: CI
@@ -28,7 +28,7 @@ spec:
 
         // set quality gate
         {{if .qualityGate}}
-        sh "start setting qualitygate {{.qualityGate}} for {{.sonarProjectName}}"
+        sh "echo start setting qualitygate {{.qualityGate}} for {{.sonarProjectName}}"
         sh "set-qualitygate ${sonar_info['endpoint']} ${sonar_info['token']} \
                       {{.qualityGate}} {{.sonarProjectName}} {{.sonarProjectKey}}"
         {{end}}
