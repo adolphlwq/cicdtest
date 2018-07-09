@@ -10,7 +10,7 @@ metadata:
     alauda.io/description.en: Clone
     alauda.io/readme.zh-CN: 克隆代码
     alauda.io/readme.en: Clone
-    alauda.io/version: v0.2
+    alauda.io/version: v0.2.1
     alauda.io/style.icon: 
   labels:
     catgory: CI
@@ -61,8 +61,8 @@ spec:
         SVN_REVISION = scmVars.SVN_REVISION
         env.SVN_REVISION = SVN_REVISION
         env.CODE_COMMIT = SVN_REVISION
-        stash "cloneCode"
         {{- end}}
+        stash "cloneCode"
     }
   arguments: # arguments
     - name: "SCM" #用于模板中接收值
