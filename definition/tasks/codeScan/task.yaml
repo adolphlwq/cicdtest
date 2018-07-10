@@ -9,7 +9,7 @@ metadata:
     alauda.io/description.en: CodeScan
     alauda.io/readme.zh-CN: 代码扫描
     alauda.io/readme.en: CodeScan
-    alauda.io/version: v0.4.14
+    alauda.io/version: v0.4.15
     alauda.io/style.icon: 
   labels:
     catgory: CI
@@ -52,12 +52,8 @@ spec:
         withSonarQubeEnv('sonarqube') {
           sh "sonar-scanner ${SONAR_SCANNER_OPTS.join(' ')}"
           {{if .waitForQualityGate}}
-          timeout(time: 1, unit: 'HOURS') {
-            def qg = waitForQualityGate()
-            if (qg.status != 'OK') {
-              error "Pipeline aborted due to quality gate failure: ${qg.status}"
-            }
-          }
+          sh "cmdsonar --host ${sonar_info['endpoint']} \
+              --token ${sonar_info['token']}"
           {{end}}
         }
 
