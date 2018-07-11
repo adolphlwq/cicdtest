@@ -9,7 +9,7 @@ metadata:
     alauda.io/description.en: CodeScan
     alauda.io/readme.zh-CN: 代码扫描
     alauda.io/readme.en: CodeScan
-    alauda.io/version: v0.4.16
+    alauda.io/version: v0.4.17
     alauda.io/style.icon: 
   labels:
     catgory: CI
@@ -52,7 +52,7 @@ spec:
         withSonarQubeEnv('sonarqube') {
           sh "sonar-scanner ${SONAR_SCANNER_OPTS.join(' ')}"
           {{if .waitForQualityGate}}
-          sh "cmdsonar --host ${sonar_info['endpoint']} \
+          sh "cmdsonar taskmonitor --host ${sonar_info['endpoint']} \
               --token ${sonar_info['token']}"
           {{end}}
         }
@@ -93,7 +93,7 @@ spec:
         name:
           zh-CN: "Sonar扫描质量阈"
           en: "Sonar Scan QualityGate"
-      required: false
+      required: true
       default: ""
     - name: "sonarProjectKey"
       schema:
@@ -106,7 +106,7 @@ spec:
         description:
           zh-CN: "Sonar项目Key"
           en: "Sonar Project Key"
-      required: false
+      required: true
       default: ""
     - name: "sonarProjectName"
       schema:
@@ -119,7 +119,7 @@ spec:
         description:
           zh-CN: "Sonar项目Name"
           en: "Sonar Project Name"
-      required: false
+      required: true
       default: ""
     - name: "lang"
       schema:
