@@ -9,7 +9,7 @@ metadata:
     alauda.io/description.en: CodeScan
     alauda.io/readme.zh-CN: 代码扫描
     alauda.io/readme.en: CodeScan
-    alauda.io/version: v0.4.18
+    alauda.io/version: v0.4.19
     alauda.io/style.icon: 
   labels:
     catgory: CI
@@ -73,11 +73,11 @@ spec:
       schema:
         type: string
       display:
-        type: alauda.io/sonarqube/qualitygate
+        type: alauda.io/sonarqube/qualitygates
         name:
           zh-CN: "Sonar扫描质量阈"
           en: "Sonar Scan QualityGate"
-      required: true
+      required: false
       default: ""
     - name: "sonarProjectKey"
       schema:
@@ -141,10 +141,10 @@ spec:
       display:
         type: boolean
         name:
-          zh-CN: "是否等待扫描结果"
-          en: "Enable Wait QualityGate"
+          zh-CN: "是否等待代码扫描结果"
+          en: "Enable If Wait QualityGate Result"
         description:
-          zh-CN: 是否等待扫描结果
-          en: If Enable Wait QualityGat
+          zh-CN: "如果开启，当前流水线将等待SonarQube扫描结果，并根据结果决定流水线的成功或者失败"
+          en: "If Enable, Will Wait SonarQube Analysis Result According to QualityGate"
       required: false
       default: false

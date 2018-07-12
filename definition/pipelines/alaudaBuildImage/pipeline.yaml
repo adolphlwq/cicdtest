@@ -9,7 +9,7 @@ metadata:
     alauda.io/description.en: Clone code and builds a docker image
     alauda.io/readme.zh-CN: 克隆代码并构建镜像
     alauda.io/readme.en: Clone code and builds a docker image
-    alauda.io/version: v0.4.13
+    alauda.io/version: v0.4.14
     alauda.io/style.icon: build
   labels:
     category: CICD
@@ -378,11 +378,11 @@ spec:
             args:
               types: SonarQube
             name:
-              zh-CN: "Sonarqube集成实例ID"
-              en: "Sonarqube Integration Instance ID"
+              zh-CN: "Sonarqube集成实例"
+              en: "Sonarqube Integration Instance"
             description:
-              zh-CN: "Sonarqube集成实例ID"
-              en: "Sonarqube Integration Instance ID"
+              zh-CN: "Sonarqube集成实例"
+              en: "Sonarqube Integration Instance"
           required: true
           default: ""
           relation:
@@ -396,15 +396,15 @@ spec:
           binding:
             - CodeScan.args.qualityGate
           display:
-            type: alauda.io/sonarqube/qualitygate
+            type: alauda.io/sonarqube/qualitygates
             related: integrationSonarQubeID
             name:
-              zh-CN: "Sonar扫描质量阈"
-              en: "Sonar Scan QualityGate"
+              zh-CN: "SonarQube扫描质量阈"
+              en: "SonarQube Scan QualityGate"
             description:
-              zh-CN: "Sonar扫描质量阈"
-              en: "Sonar Scan QualityGate"
-          required: true
+              zh-CN: "SonarQube扫描质量阈"
+              en: "SonarQube Scan QualityGate"
+          required: false
           default: ""
           relation:
             - action: show
@@ -458,6 +458,7 @@ spec:
             - CodeScan.args.lang
           display:
             type: alauda.io/sonarqube/lang
+            related: integrationSonarQubeID
             name:
               zh-CN: "项目开发语言"
               en: "SonarQube Project Develop Language"
@@ -499,11 +500,11 @@ spec:
           display:
             type: string
             name:
-              zh-CN: "sonar配置文件路径"
-              en: "Sonar Properties File Path"
+              zh-CN: "SonarQube配置文件路径"
+              en: "SonarQube Properties File Path"
             description:
-              zh-CN: "sonar配置文件路径"
-              en: "Sonar Properties File Path"
+              zh-CN: "SonarQube配置文件路径"
+              en: "SonarQube Properties File Path"
           required: false
           default: "./sonar-project.properties"
           relation:
