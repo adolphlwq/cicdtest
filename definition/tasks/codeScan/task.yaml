@@ -9,7 +9,7 @@ metadata:
     alauda.io/description.en: CodeScan
     alauda.io/readme.zh-CN: 代码扫描
     alauda.io/readme.en: CodeScan
-    alauda.io/version: v0.4.20
+    alauda.io/version: v0.4.21
     alauda.io/style.icon: 
   labels:
     catgory: CI
@@ -29,11 +29,11 @@ spec:
       {{if .qualityGate}}
       sh "echo start setting qualitygate to {{.qualityGate}}"
       {{if .propertiesPath}}
-      sh "cmdsonar qualitygate select --host ${sonar_info['endpoint']} \
-          --token ${sonar_info['token']} --gate-id {{.qualityGate}} --properties {{.propertiesPath}}"
+      sh "cmdsonar qualitygate select --host ${sonar_info['endpoint']} --token ${sonar_info['token']} \
+          --gate-id {{.qualityGate}} --name ${env.JOB_NAME} --properties {{.propertiesPath}}"
       {{else}}
-      sh "cmdsonar qualitygate select --host ${sonar_info['endpoint']} \
-          --token ${sonar_info['token']} --gate-id {{.qualityGate}}"
+      sh "cmdsonar qualitygate select --host ${sonar_info['endpoint']} --token ${sonar_info['token']} \
+          --gate-id --name ${env.JOB_NAME} {{.qualityGate}}"
       {{end}}
       {{end}}
 
