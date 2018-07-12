@@ -9,7 +9,7 @@ metadata:
     alauda.io/description.en: CodeScan
     alauda.io/readme.zh-CN: 代码扫描
     alauda.io/readme.en: CodeScan
-    alauda.io/version: v0.4.17
+    alauda.io/version: v0.4.18
     alauda.io/style.icon: 
   labels:
     catgory: CI
@@ -19,70 +19,54 @@ spec:
     label: sonarqube
   body: |+
     script{
-      {{- if .sonarScanEnabled}}
-        // unstash cloneCode
-        unstash "cloneCode"
+      // unstash cloneCode
+      unstash "cloneCode"
 
-        // get sonar token and url
-        def sonar_info = alauda.retrieveIntegration("{{.integrationID}}", "")
+      // get sonar token and url
+      def sonar_info = alauda.retrieveIntegration("{{.integrationSonarQubeID}}", "")
 
-        // set quality gate
-        {{if .qualityGate}}
-        sh "echo start setting qualitygate {{.qualityGate}} for {{.sonarProjectName}}"
-        sh "set-qualitygate ${sonar_info['endpoint']} ${sonar_info['token']} \
-                      {{.qualityGate}} {{.sonarProjectName}} {{.sonarProjectKey}}"
+      // set quality gate
+      {{if .qualityGate}}
+      sh "echo start setting qualitygate {{.qualityGate}} for {{.sonarProjectName}}"
+      sh "set-qualitygate ${sonar_info['endpoint']} ${sonar_info['token']} \
+                    {{.qualityGate}} {{.sonarProjectName}} {{.sonarProjectKey}}"
+      {{end}}
+
+      // wrap sonar-scanner command
+      def SONAR_SCANNER_OPTS=[]
+      SONAR_SCANNER_OPTS << "-Dsonar.host.url=${sonar_info['endpoint']}"
+      SONAR_SCANNER_OPTS << "-Dsonar.login=${sonar_info['token']}"
+
+      {{if .lang}}
+      SONAR_SCANNER_OPTS << '-Dsonar.language={{.lang}}'
+      {{end}}
+      {{if .sonarContextDir}}
+      SONAR_SCANNER_OPTS << '-Dsonar.sources={{.sonarContextDir}}'
+      {{end}}
+      {{if .propertiesPath}}
+      SONAR_SCANNER_OPTS << '-Dproject.settings={{.propertiesPath}}'
+      {{end}}
+
+      // start scan
+      withSonarQubeEnv('sonarqube') {
+        sh "sonar-scanner ${SONAR_SCANNER_OPTS.join(' ')}"
+        {{if .waitForQualityGate}}
+        sh "cmdsonar taskmonitor --host ${sonar_info['endpoint']} \
+            --token ${sonar_info['token']}"
         {{end}}
-
-        // wrap sonar-scanner command
-        def SONAR_SCANNER_OPTS=[]
-        SONAR_SCANNER_OPTS << "-Dsonar.host.url=${sonar_info['endpoint']}"
-        SONAR_SCANNER_OPTS << "-Dsonar.login=${sonar_info['token']}"
-
-        {{if .lang}}
-        SONAR_SCANNER_OPTS << '-Dsonar.language={{.lang}}'
-        {{end}}
-        {{if .sonarContextDir}}
-        SONAR_SCANNER_OPTS << '-Dsonar.sources={{.sonarContextDir}}'
-        {{end}}
-        {{if .propertiesPath}}
-        SONAR_SCANNER_OPTS << '-Dproject.settings={{.propertiesPath}}'
-        {{end}}
-
-        // start scan
-        withSonarQubeEnv('sonarqube') {
-          sh "sonar-scanner ${SONAR_SCANNER_OPTS.join(' ')}"
-          {{if .waitForQualityGate}}
-          sh "cmdsonar taskmonitor --host ${sonar_info['endpoint']} \
-              --token ${sonar_info['token']}"
-          {{end}}
-        }
-
-      {{- else}}
-      echo "not enable sonar code scan, will do nothing."
-      {{- end}}
+      }
     }
   arguments:
-    - name: "sonarScanEnabled"
-      schema:
-        type: boolean
-      display:
-        type: boolean
-        name:
-          zh-CN: "是否开启代码扫描"
-          en: "Enable Sonar Scan"
-        description:
-          zh-CN: 是否开启代码扫描
-          en: If Enable Sonar Scan
-      required: true
-      default: false
-    - name: "integrationID"
+    - name: "integrationSonarQubeID"
       schema:
         type: string
       display:
-        type: alauda.io/integrations/sonarqube
+        type: alauda.io/integration
+        args:
+          types: SonarQube
         name:
-          zh-CN: "Jenkins集成实例ID"
-          en: "Jenkins Integration Instance ID"
+          zh-CN: "SonarQube集成实例"
+          en: "SonarQube Integration Instance"
       required: true
       default: ""
     - name: "qualityGate"
