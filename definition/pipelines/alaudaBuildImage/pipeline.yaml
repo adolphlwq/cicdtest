@@ -9,7 +9,7 @@ metadata:
     alauda.io/description.en: Clone code and builds a docker image
     alauda.io/readme.zh-CN: 克隆代码并构建镜像
     alauda.io/readme.en: Clone code and builds a docker image
-    alauda.io/version: v0.4.15
+    alauda.io/version: v0.4.16
     alauda.io/style.icon: build
   labels:
     category: CICD
@@ -26,12 +26,6 @@ spec:
       tasks:
         - name: Clone
           type: testorg001/clone
-    - name: BuildImage
-      tasks:
-        - name: BuildImage
-          type: public/alaudaBuildImage
-          options:
-            timeout: 3600
     - name: CodeScan
       tasks:
         - name: CodeScan
@@ -43,6 +37,12 @@ spec:
               when:
                 name: sonarScanEnabled
                 value: true
+    - name: BuildImage
+      tasks:
+        - name: BuildImage
+          type: public/alaudaBuildImage
+          options:
+            timeout: 3600
   arguments:
     - displayName:
         zh-CN: "基本信息"
@@ -63,6 +63,147 @@ spec:
               en: Path of ci command executing
           required: true
           default: ./
+    - displayName:
+        zh-CN: 配置SonarQube代码扫描
+        en: SonarQube Code Scan Configuration
+      items:
+        - name: "sonarScanEnabled"
+          schema:
+            type: boolean
+          display:
+            type: boolean
+            name:
+              zh-CN: "是否开启代码扫描"
+              en: "Enable SonarQube Scan"
+            description:
+              zh-CN: 是否开启代码扫描
+              en: If Enable SonarQube Scan
+          required: false
+          default: false
+        - name: "integrationSonarQubeID"
+          schema:
+            type: string
+          binding:
+            - CodeScan.args.integrationSonarQubeID
+          display:
+            type: alauda.io/integration
+            args:
+              types: SonarQube
+            name:
+              zh-CN: "SonarQube集成实例"
+              en: "SonarQube Integration Instance"
+            description:
+              zh-CN: "SonarQube集成实例"
+              en: "SonarQube Integration Instance"
+          required: true
+          default: ""
+          relation:
+            - action: show
+              when:
+                name: sonarScanEnabled
+                value: true
+        - name: "qualityGate"
+          schema:
+            type: string
+          binding:
+            - CodeScan.args.qualityGate
+          display:
+            type: alauda.io/sonarqube/qualitygates
+            related: integrationSonarQubeID
+            name:
+              zh-CN: "SonarQube扫描质量阈"
+              en: "SonarQube Scan QualityGate"
+            description:
+              zh-CN: "SonarQube扫描质量阈"
+              en: "SonarQube Scan QualityGate"
+          required: false
+          default: ""
+          relation:
+            - action: show
+              when:
+                name: sonarScanEnabled
+                value: true
+        - name: "lang"
+          schema:
+            type: string
+          binding:
+            - CodeScan.args.lang
+          display:
+            type: alauda.io/sonarqube/lang
+            related: integrationSonarQubeID
+            name:
+              zh-CN: "项目开发语言"
+              en: "SonarQube Project Develop Language"
+            description:
+              zh-CN: "项目开发语言"
+              en: "SonarQube Project Develop Language"
+          required: false
+          default: ""
+          relation:
+            - action: show
+              when:
+                name: sonarScanEnabled
+                value: true
+        - name: "sonarContextDir"
+          schema:
+            type: string
+          binding:
+            - CodeScan.args.sonarContextDir
+          display:
+            type: string
+            name:
+              zh-CN: "扫描路径"
+              en: "Sonar Scan Context Directory"
+            description:
+              zh-CN: "扫描路径"
+              en: "Sonar Scan Context Directory"
+          required: false
+          default: "."
+          relation:
+            - action: show
+              when:
+                name: sonarScanEnabled
+                value: true
+        - name: "propertiesPath"
+          schema:
+            type: string
+          binding:
+            - CodeScan.args.propertiesPath
+          display:
+            type: string
+            name:
+              zh-CN: "SonarQube配置文件路径"
+              en: "SonarQube Properties File Path"
+            description:
+              zh-CN: "SonarQube配置文件路径"
+              en: "SonarQube Properties File Path"
+          required: false
+          default: "./sonar-project.properties"
+          relation:
+            - action: show
+              when:
+                name: sonarScanEnabled
+                value: true
+        - name: "waitForQualityGate"
+          schema:
+            type: boolean
+          binding:
+            - CodeScan.args.waitForQualityGate
+          display:
+            type: boolean
+            name:
+              zh-CN: "是否等待扫描结果"
+              en: "Enable Wait QualityGate"
+            description:
+              zh-CN: 是否等待扫描结果
+              en: If Enable Wait QualityGat
+          required: false
+          default: false
+          relation:
+            - action: show
+              when:
+                name: sonarScanEnabled
+                value: true
     - displayName:
         zh-CN: "配置持续集成"
         en: "CI Configuration"
@@ -350,145 +491,4 @@ spec:
             - action: show
               when:
                 name: buildImageEnabled
-                value: true
-    - displayName:
-      zh-CN: 配置SonarQube代码扫描
-      en: SonarQube Code Scan Configuration
-      items:
-        - name: "sonarScanEnabled"
-          schema:
-            type: boolean
-          display:
-            type: boolean
-            name:
-              zh-CN: "是否开启代码扫描"
-              en: "Enable SonarQube Scan"
-            description:
-              zh-CN: 是否开启代码扫描
-              en: If Enable SonarQube Scan
-          required: true
-          default: false
-        - name: "integrationSonarQubeID"
-          schema:
-            type: string
-          binding:
-            - CodeScan.args.integrationSonarQubeID
-          display:
-            type: alauda.io/integration
-            args:
-              types: SonarQube
-            name:
-              zh-CN: "Sonarqube集成实例"
-              en: "Sonarqube Integration Instance"
-            description:
-              zh-CN: "Sonarqube集成实例"
-              en: "Sonarqube Integration Instance"
-          required: true
-          default: ""
-          relation:
-            - action: show
-              when:
-                name: sonarScanEnabled
-                value: true
-        - name: "qualityGate"
-          schema:
-            type: string
-          binding:
-            - CodeScan.args.qualityGate
-          display:
-            type: alauda.io/sonarqube/qualitygates
-            related: integrationSonarQubeID
-            name:
-              zh-CN: "SonarQube扫描质量阈"
-              en: "SonarQube Scan QualityGate"
-            description:
-              zh-CN: "SonarQube扫描质量阈"
-              en: "SonarQube Scan QualityGate"
-          required: false
-          default: ""
-          relation:
-            - action: show
-              when:
-                name: sonarScanEnabled
-                value: true
-        - name: "lang"
-          schema:
-            type: string
-          binding:
-            - CodeScan.args.lang
-          display:
-            type: alauda.io/sonarqube/lang
-            related: integrationSonarQubeID
-            name:
-              zh-CN: "项目开发语言"
-              en: "SonarQube Project Develop Language"
-            description:
-              zh-CN: "项目开发语言"
-              en: "SonarQube Project Develop Language"
-          required: false
-          default: ""
-          relation:
-            - action: show
-              when:
-                name: sonarScanEnabled
-                value: true
-        - name: "sonarContextDir"
-          schema:
-            type: string
-          binding:
-            - CodeScan.args.sonarContextDir
-          display:
-            type: string
-            name:
-              zh-CN: "扫描路径"
-              en: "Sonar Scan Context Directory"
-            description:
-              zh-CN: "扫描路径"
-              en: "Sonar Scan Context Directory"
-          required: false
-          default: "."
-          relation:
-            - action: show
-              when:
-                name: sonarScanEnabled
-                value: true
-        - name: "propertiesPath"
-          schema:
-            type: string
-          binding:
-            - CodeScan.args.propertiesPath
-          display:
-            type: string
-            name:
-              zh-CN: "SonarQube配置文件路径"
-              en: "SonarQube Properties File Path"
-            description:
-              zh-CN: "SonarQube配置文件路径"
-              en: "SonarQube Properties File Path"
-          required: false
-          default: "./sonar-project.properties"
-          relation:
-            - action: show
-              when:
-                name: sonarScanEnabled
-                value: true
-        - name: "waitForQualityGate"
-          schema:
-            type: boolean
-          binding:
-            - CodeScan.args.waitForQualityGate
-          display:
-            type: boolean
-            name:
-              zh-CN: "是否等待扫描结果"
-              en: "Enable Wait QualityGate"
-            description:
-              zh-CN: 是否等待扫描结果
-              en: If Enable Wait QualityGat
-          required: false
-          default: false
-          relation:
-            - action: show
-              when:
-                name: sonarScanEnabled
                 value: true

@@ -9,7 +9,7 @@ metadata:
     alauda.io/description.en: CodeScan
     alauda.io/readme.zh-CN: 代码扫描
     alauda.io/readme.en: CodeScan
-    alauda.io/version: v0.4.21
+    alauda.io/version: v0.4.23
     alauda.io/style.icon: 
   labels:
     catgory: CI
@@ -19,28 +19,27 @@ spec:
     label: sonarqube
   body: |+
     script{
-      // unstash cloneCode
       unstash "cloneCode"
+      def sonar_info = alauda.integration("{{.integrationSonarQubeID}}", "").retrieve()
 
-      // get sonar token and url
-      def sonar_info = alauda.retrieveIntegration("{{.integrationSonarQubeID}}", "")
-
-      // set quality gate
       {{if .qualityGate}}
+      {{if eq .qualityGate "1"}}
+      sh "echo use default qualitygate {{.qualityGate}}"
+      {{else}}
       sh "echo start setting qualitygate to {{.qualityGate}}"
       {{if .propertiesPath}}
-      sh "cmdsonar qualitygate select --host ${sonar_info['endpoint']} --token ${sonar_info['token']} \
+      sh "cmdsonar qualitygate select --host ${sonar_info.getEndpoint()} --token ${sonar_info.getToken()} \
           --gate-id {{.qualityGate}} --name ${env.JOB_NAME} --properties {{.propertiesPath}}"
       {{else}}
-      sh "cmdsonar qualitygate select --host ${sonar_info['endpoint']} --token ${sonar_info['token']} \
+      sh "cmdsonar qualitygate select --host ${sonar_info.getEndpoint()} --token ${sonar_info.getToken()} \
           --gate-id --name ${env.JOB_NAME} {{.qualityGate}}"
       {{end}}
       {{end}}
+      {{end}}
 
-      // wrap sonar-scanner command
       def SONAR_SCANNER_OPTS=[]
-      SONAR_SCANNER_OPTS << "-Dsonar.host.url=${sonar_info['endpoint']}"
-      SONAR_SCANNER_OPTS << "-Dsonar.login=${sonar_info['token']}"
+      SONAR_SCANNER_OPTS << "-Dsonar.host.url=${sonar_info.getEndpoint()}"
+      SONAR_SCANNER_OPTS << "-Dsonar.login=${sonar_info.getToken()}"
 
       {{if .lang}}
       SONAR_SCANNER_OPTS << '-Dsonar.language={{.lang}}'
@@ -56,8 +55,8 @@ spec:
       withSonarQubeEnv('sonarqube') {
         sh "sonar-scanner ${SONAR_SCANNER_OPTS.join(' ')}"
         {{if .waitForQualityGate}}
-        sh "cmdsonar taskmonitor --host ${sonar_info['endpoint']} \
-            --token ${sonar_info['token']}"
+        sh "cmdsonar taskmonitor --host ${sonar_info.getEndpoint()} \
+            --token ${sonar_info.getToken()}"
         {{end}}
       }
     }
